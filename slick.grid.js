@@ -715,7 +715,16 @@ if (typeof Slick === "undefined") {
         $col = $(e);
         $("<div class='slick-resizable-handle' />")
             .appendTo(e)
-            .bind("dragstart", function (e, dd) {
+            // [KCPT]
+            // all touch support here added by KCPT.
+            // increase touchable area on touch devices
+            // see http://modernizr.github.com/Modernizr/touch.html for discussion of
+            // this test as a means to determine that we're running on a touch platform.
+            // We also increase the width of the resize area for the last column so that
+            // it isn't entirely overlapped/hidden by the divider view.
+            .css({ width: 'ontouchstart' in window ? 16 : (i === lastResizable ? 8 : 4) })
+            // [\KCPT]
+            .bind("dragstart touchstart", function (e, dd) {
               if (!getEditorLock().commitCurrentEdit()) {
                 return false;
               }
@@ -774,7 +783,7 @@ if (typeof Slick === "undefined") {
               maxPageX = pageX + Math.min(shrinkLeewayOnRight, stretchLeewayOnLeft);
               minPageX = pageX - Math.min(shrinkLeewayOnLeft, stretchLeewayOnRight);
             })
-            .bind("drag", function (e, dd) {
+            .bind("drag touchmove", function (e, dd) {
               var actualMinWidth, d = Math.min(maxPageX, Math.max(minPageX, e.pageX)) - pageX, x;
               if (d < 0) { // shrink column
                 x = d;
@@ -844,7 +853,7 @@ if (typeof Slick === "undefined") {
                 applyColumnWidths();
               }
             })
-            .bind("dragend", function (e, dd) {
+            .bind("dragend touchend", function (e, dd) {
               var newWidth;
               $(this).parent().removeClass("slick-header-column-active");
               for (j = 0; j < columnElements.length; j++) {
