@@ -406,6 +406,7 @@ if (typeof Slick === "undefined") {
         $headerRow.width(canvasWidth);
         $headers.width(getHeadersWidth());
         viewportHasHScroll = (canvasWidth > viewportW - scrollbarDimensions.width);
+        trigger(self.onCanvasWidthChanged, { width: canvasWidth });
       }
 
       $headerRowSpacer.width(canvasWidth + (viewportHasVScroll ? scrollbarDimensions.width : 0));
@@ -846,6 +847,7 @@ if (typeof Slick === "undefined") {
               applyColumnHeaderWidths();
               if (options.syncColumnCellResize) {
                 applyColumnWidths();
+                updateCanvasWidth(true);
               }
             })
             .bind("dragend", function (e, dd) {
@@ -3254,6 +3256,7 @@ if (typeof Slick === "undefined") {
       "onKeyDown": new Slick.Event(),
       "onAddNewRow": new Slick.Event(),
       "onValidationError": new Slick.Event(),
+      "onCanvasWidthChanged": new Slick.Event(),
       "onViewportChanged": new Slick.Event(),
       "onColumnsReordered": new Slick.Event(),
       "onColumnsResized": new Slick.Event(),
