@@ -1549,6 +1549,22 @@ if (typeof Slick === "undefined") {
           (options.showHeaderRow ? options.headerRowHeight + getVBoxDelta($headerRowScroller) : 0);
     }
 
+    // Returns the size of the content area
+    function getCanvasSize() {
+      return { width: $canvas.width(), height: $canvas.height() };
+    }
+    
+    // Returns the size of the visible area, i.e. between the scroll bars
+    function getVisibleSize() {
+      var width = $viewport.width(),
+          height = $viewport.height(),
+          hasHScroll = $canvas.width() > width - scrollbarDimensions.width,
+          hasVScroll = $canvas.height() > height - scrollbarDimensions.height;
+      width -= hasVScroll ? scrollbarDimensions.width : 0;
+      height -= hasHScroll ? scrollbarDimensions.height : 0;
+      return { width: width, height: height };
+    }
+
     function resizeCanvas() {
       if (!initialized) { return; }
       if (options.autoHeight) {
@@ -3235,6 +3251,8 @@ if (typeof Slick === "undefined") {
       "updateRow": updateRow,
       "getViewport": getVisibleRange,
       "getRenderedRange": getRenderedRange,
+      "getCanvasSize": getCanvasSize,
+      "getVisibleSize": getVisibleSize,
       "resizeCanvas": resizeCanvas,
       "updateRowCount": updateRowCount,
       "scrollRowIntoView": scrollRowIntoView,
