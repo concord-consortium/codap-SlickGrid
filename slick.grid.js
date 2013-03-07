@@ -51,6 +51,86 @@ if (typeof Slick === "undefined") {
    * @param {Array,Object}      data        An array of objects for databinding.
    * @param {Array}             columns     An array of column definitions.
    * @param {Object}            options     Grid options.
+   *
+   * [KCPT] SlickGrid 2.1
+   *  data: Array of data items or an object which implements the data-access functions
+   *    {Array} of data items, each item has the following:
+   *      id:         {String}    A unique ID for the item
+   *      Other properties as indicated by the 'field' entries of the columns array.
+   *      For instance, if one of the columns specifies a field value of 'name',
+   *      then each item of the data array should have a 'name' property.
+   *    {Object} implementing the data-access functions:
+   *      getLength()         Returns the number of data items (analogous to data.length)
+   *      getItem(i)          Returns the ith data item (analogous to data[i])
+   *      getItemMetadata(i)  Returns the metadata for the ith row
+   *    Slick.DataView is an example of an Object which provides this API. It is essentially
+   *    a wrapper around an {Array} of data items which provides additional data manipulation
+   *    features, such as filtering and sorting.
+   *      
+   *  columns: Array of objects which specify details about the columns
+   *      id:                 {String}    A unique ID for the column
+   *      name:               {String}    The name of the column, displayed in column header cell
+   *      field:              {String}    The name of the data item property to be displayed in this column
+   *      width:              {Number}    The width of the column in pixels
+   *      minWidth:           {Number}    The minimum width of the column
+   *      maxWidth:           {Number}    The maximum width of the column
+   *      cssClass:           {String}    The name of the CSS class to use for cells in this column
+   *      formatter:          {Function}  formatter(rowIndex, colIndex, cellValue, colInfo, rowItem)
+   *      editor:             {Function}  The constructor function for the class to use for editing
+   *      validator:          {Function}  A function to be called when validating user-entered values
+   *      cannotTriggerInsert:{Boolean}   
+   *      resizable:          {Boolean}   Whether this column can be resized
+   *      selectable:         {Boolean}   Whether this column can be selected
+   *      sortable:           {Boolean}   Whether the grid rows can be sorted by this column
+   *
+   *  options: Object with additional customization options
+   *      explicitInitialization:
+   *                          {Boolean}   Defers initialization until the client calls the
+   *                                      grid.init() method explicitly. Supports situations in
+   *                                      which SlickGrid containers may not be in the DOM at creation.
+   *      rowHeight:          {Number}    Height of each row in pixels
+   *      autoHeight:         {Boolean}   (?) Don't need vertical scroll bar
+   *      defaultColumnWidth: {Number}    Default column width for columns that don't specify a width
+   *      enableColumnReorder:{Boolean}   Can columns be reordered?
+   *      enableAddRow:       {Boolean}   Can rows be added?
+   *      leaveSpaceForNewRows:{Boolean}  Should space be left for a new/data entry row at bottom?
+   *      showTopPanel:       {Boolean}   Should the top panel be shown?
+   *      topPanelHeight:     {Number}    Height of the top panel in pixels
+   *      showHeaderRow:      {Boolean}   Should the header row be shown?
+   *      headerRowHeight:    {Number}    Height of the header row in pixels
+   *      enableCellNavigation:{Boolean}  Should arrow keys navigate between cells?
+   *      enableTextSelectionOnCells:
+   *                          {Boolean}   Should text selection be allowed in cells?
+   *      forceFitColumns:    {Boolean}   Should column widths be automatically resized to fit?
+   *      syncColumnCellResize:{Boolean}  Should the grid width be changed dynamically during a drag
+   *                                      to change column widths, or only once the mouse is released? 
+   *      dataItemColumnValueExtractor(item, columnDef):
+   *                          {Function}  If present, will be called to retrieve a data value from the
+   *                                      specified item for the corresponding column.
+   *                                      Analogous to item[columnDef.field], where item is analogous to data[i].
+   *      formatterFactory:   {Object}    If present, its getFormatter(column) method will be called
+   *                                      to retrieve a formatter for the specified cell
+   *      selectedCellCssClass:{Object?}  (?)Object used to specify CSS class for selected cells
+   *      cellFlashingCssClass:{Object?}  (?)Object used to specify CSS class for flashing cells
+   *      enableAsyncPostRender:{Boolean} 
+   *      asyncPostRenderDelay:{Number}   Delay passed to setTimeout in milliseconds
+   *      editable:           {Boolean}   Is editing table cells supported?
+   *      autoEdit:           {Boolean}   (?)Should editing be initiated automatically on click in cell?
+   *      editorFactory:      {Object}    If present, its getEditor(column) method will be called 
+   *                                      to retrieve an editor for the specified cell,
+   *                                      unless column.editor is specified, which will be used.
+   *      editorLock:
+   *      asyncEditorLoading: {Boolean}   Should editors be loaded asynchronously?
+   *      asyncEditorLoadDelay:{Number}   Delay passed to setTimeout in milliseconds
+   *      editCommandHandler: {Function}  editCommandHandler(item, column, editCommand) is called from
+   *                                      the commitCurrentEdit() function, where it can be used to
+   *                                      implement undo/redo, for instance.
+   *      fullWidthRows:      {Boolean}   If true, rows are sized to take up the available grid width.
+   *      multiColumnSort:    {Boolean}   If true, rows can be sorted by multiple columns.
+   *      defaultFormatter:   {Function}  Default function for converting cell values to strings.
+   *      forceSyncScrolling: {Boolean}   If true, renders more frequently during scrolling, rather than
+   *                                      deferring rendering until default scroll thresholds are met.
+   * [/KCPT]
    **/
   function SlickGrid(container, data, columns, options) {
     // settings
