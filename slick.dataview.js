@@ -19,6 +19,19 @@
    * Provides a filtered view of the underlying data.
    *
    * Relies on the data item having an "id" property uniquely identifying it.
+   *
+   *  @param  {Object}      options
+   *          {Slick.Data.GroupItemMetadataProvider}
+   *                        .groupItemMetadataProvider      Grouping helper
+   *          {Boolean}     .inlineFilters                  True if the filter expression should
+   *                                                        be "inlined" internally for performance.
+   *                                                        Inlining should lead to better performance,
+   *                                                        but may not work in some circumstances.
+   *          {Boolean}     .showExpandedGroupRows [KCPT]   If true, group header rows are shown
+   *                                                        for expanded groups as well as
+   *                                                        collapsed groups. If false, group
+   *                                                        header rows are shown only for
+   *                                                        collapsed groups.
    */
   function DataView(options) {
     var self = this;
