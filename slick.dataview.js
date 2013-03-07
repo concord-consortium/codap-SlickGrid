@@ -417,6 +417,27 @@
 
     /**
      * @param varArgs Either a Slick.Group's "groupingKey" property, or a
+     *     variable argument list of grouping values denoting a unique path to the row.
+     *     For example, calling isGroupCollapsed('high', '10%') will return whether the
+     *     collapse the '10%' subgroup of the 'high' setGrouping is collapsed.
+     */
+    function isGroupCollapsed(groupingValue) {
+      var args = Array.prototype.slice.call(arguments);
+      var arg0 = args[0];
+      var level;
+      var groupingKey;
+      if (args.length == 1 && arg0.indexOf(groupingDelimiter) != -1) {
+        level = arg0.split(groupingDelimiter).length - 1;
+        groupingKey = arg0;
+      } else {
+        level = args.length - 1;
+        groupingKey = args.join(groupingDelimiter);
+      }
+      return toggledGroupsByLevel[level][groupingKey];
+    }
+    
+    /**
+     * @param varArgs Either a Slick.Group's "groupingKey" property, or a
      *     variable argument list of grouping values denoting a unique path to the row.  For
      *     example, calling collapseGroup('high', '10%') will collapse the '10%' subgroup of
      *     the 'high' setGrouping.
@@ -915,6 +936,7 @@
       "setAggregators": setAggregators,
       "collapseAllGroups": collapseAllGroups,
       "expandAllGroups": expandAllGroups,
+      "isGroupCollapsed": isGroupCollapsed,
       "collapseGroup": collapseGroup,
       "expandGroup": expandGroup,
       "getGroups": getGroups,
