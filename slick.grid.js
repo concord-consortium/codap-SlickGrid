@@ -304,7 +304,11 @@ if (typeof Slick === "undefined") {
             .bind("contextmenu", handleHeaderContextMenu)
             .bind("click", handleHeaderClick)
             .delegate(".slick-header-column", "mouseenter", handleHeaderMouseEnter)
-            .delegate(".slick-header-column", "mouseleave", handleHeaderMouseLeave);
+            .delegate(".slick-header-column", "mouseleave", handleHeaderMouseLeave)
+            .bind("draginit", handleHeaderDragInit)
+            .bind("dragstart", handleHeaderDragStart)
+            .bind("drag", handleHeaderDrag)
+            .bind("dragend", handleHeaderDragEnd);
         $headerRowScroller
             .bind("scroll", handleHeaderRowScroll);
         $focusSink.add($focusSink2)
@@ -2114,6 +2118,52 @@ if (typeof Slick === "undefined") {
     //////////////////////////////////////////////////////////////////////////////////////////////
     // Interactivity
 
+    // Handle header drags the way body drags are handled, so we set up a parallel
+    // set of handlers to the ones used for body drags.
+    function handleHeaderDragInit(e, dd) {
+      var $header = $(e.target).closest(".slick-header-column", ".slick-header-columns");
+      var column = $header && $header.data("column");
+
+      if (!column) {
+        return false;
+      }
+
+      dd.column = column;
+      retval = trigger(self.onHeaderDragInit, dd, e);
+      if (e.isImmediatePropagationStopped()) {
+        return retval;
+      }
+
+      // if nobody claims to be handling drag'n'drop by stopping immediate propagation,
+      // cancel out of it
+      return false;
+    }
+
+    function handleHeaderDragStart(e, dd) {
+      var $header = $(e.target).closest(".slick-header-column", ".slick-header-columns");
+      var column = $header && $header.data("column");
+
+      if (!column) {
+        return false;
+      }
+
+      dd.column = column;
+      var retval = trigger(self.onHeaderDragStart, dd, e);
+      if (e.isImmediatePropagationStopped()) {
+        return retval;
+      }
+
+      return false;
+    }
+
+    function handleHeaderDrag(e, dd) {
+      return trigger(self.onHeaderDrag, dd, e);
+    }
+
+    function handleHeaderDragEnd(e, dd) {
+      trigger(self.onHeaderDragEnd, dd, e);
+    }
+    
     function handleDragInit(e, dd) {
       var cell = getCellFromEvent(e);
       if (!cell || !cellExists(cell.row, cell.cell)) {
@@ -3213,6 +3263,10 @@ if (typeof Slick === "undefined") {
       "onBeforeDestroy": new Slick.Event(),
       "onActiveCellChanged": new Slick.Event(),
       "onActiveCellPositionChanged": new Slick.Event(),
+      "onHeaderDragInit": new Slick.Event(),
+      "onHeaderDragStart": new Slick.Event(),
+      "onHeaderDrag": new Slick.Event(),
+      "onHeaderDragEnd": new Slick.Event(),
       "onDragInit": new Slick.Event(),
       "onDragStart": new Slick.Event(),
       "onDrag": new Slick.Event(),
