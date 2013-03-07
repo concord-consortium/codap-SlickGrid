@@ -25,7 +25,8 @@
 
     var defaults = {
       groupItemMetadataProvider: null,
-      inlineFilters: false
+      inlineFilters: false,
+      showExpandedGroupRows: true
     };
 
 
@@ -555,7 +556,9 @@
       var groupedRows = [], rows, gl = 0, g;
       for (var i = 0, l = groups.length; i < l; i++) {
         g = groups[i];
-        groupedRows[gl++] = g;
+                
+        if (options.showExpandedGroupRows || g.collapsed)
+          groupedRows[gl++] = g;
 
         if (!g.collapsed) {
           rows = g.groups ? flattenGroupedRows(g.groups) : g.rows;
