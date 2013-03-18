@@ -1678,6 +1678,7 @@ if (typeof Slick === "undefined") {
         autosizeColumns();
       }
 
+      cleanUpAndRenderCells(getRenderedRange());
       updateRowCount();
       handleScroll();
       render();
