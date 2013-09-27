@@ -397,11 +397,13 @@ if (typeof Slick === "undefined") {
       var oldCanvasWidth = canvasWidth;
       canvasWidth = getCanvasWidth();
 
+      // see https://github.com/mleibman/SlickGrid/issues/477
+      viewportHasHScroll = (canvasWidth > viewportW - scrollbarDimensions.width);
+      
       if (canvasWidth != oldCanvasWidth) {
         $canvas.width(canvasWidth);
         $headerRow.width(canvasWidth);
         $headers.width(getHeadersWidth());
-        viewportHasHScroll = (canvasWidth > viewportW - scrollbarDimensions.width);
       }
 
       $headerRowSpacer.width(canvasWidth + (viewportHasVScroll ? scrollbarDimensions.width : 0));
