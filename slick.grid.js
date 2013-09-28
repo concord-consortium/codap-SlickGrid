@@ -2060,7 +2060,8 @@ if (typeof Slick === "undefined") {
         } else {
           var oldOffset = offset;
           if (h == viewportH) {
-            page = 0;
+            // see https://github.com/mleibman/SlickGrid/issues/309
+            page = n - 1;
           } else {
             page = Math.min(n - 1, Math.floor(scrollTop * ((th - viewportH) / (h - viewportH)) * (1 / ph)));
           }
