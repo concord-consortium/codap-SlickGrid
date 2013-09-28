@@ -1647,8 +1647,14 @@ if (typeof Slick === "undefined") {
     }
 
     // Returns the size of the content area
-    function getCanvasSize() {
-      return { width: $canvas.width(), height: $canvas.height() };
+    function getContentSize() {
+      var canvasWidth = $canvas.width(),
+          canvasHeight = $canvas.height(),
+          hasVScroll = canvasHeight > $viewport.height(),
+          contentWidth = canvasWidth + (hasVScroll ? scrollbarDimensions.width : 0),
+          hasHScroll = contentWidth > $viewport.width(),
+          contentHeight = canvasHeight + (hasHScroll ? scrollbarDimensions.height : 0);
+      return { width: contentWidth, height: contentHeight };
     }
     
     // Returns the size of the visible area, i.e. between the scroll bars
@@ -3400,7 +3406,7 @@ if (typeof Slick === "undefined") {
       "updateRow": updateRow,
       "getViewport": getVisibleRange,
       "getRenderedRange": getRenderedRange,
-      "getCanvasSize": getCanvasSize,
+      "getContentSize": getContentSize,
       "getVisibleSize": getVisibleSize,
       "resizeCanvas": resizeCanvas,
       "updateRowCount": updateRowCount,
