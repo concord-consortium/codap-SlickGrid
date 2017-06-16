@@ -1444,6 +1444,22 @@ if (typeof Slick === "undefined") {
           options.defaultFormatter;
     }
 
+    // [CC] patterned after getFormatter()
+    function getTooltipFormatter(row, column) {
+      var rowMetadata = data.getItemMetadata && data.getItemMetadata(row);
+
+      // look up by id, then index
+      var columnOverrides = rowMetadata &&
+          rowMetadata.columns &&
+          (rowMetadata.columns[column.id] || rowMetadata.columns[getColumnIndex(column.id)]);
+
+      return (columnOverrides && columnOverrides.tooltipFormatter) ||
+          (rowMetadata && rowMetadata.tooltipFormatter) ||
+          column.tooltipFormatter ||
+          (options.tooltipFormatterFactory && options.tooltipFormatterFactory.getTooltipFormatter(column)) ||
+          options.defaultTooltipFormatter;
+    }
+
     function getEditor(row, cell) {
       var column = columns[cell];
       var rowMetadata = data.getItemMetadata && data.getItemMetadata(row);
@@ -1528,12 +1544,25 @@ if (typeof Slick === "undefined") {
         }
       }
 
-      stringArray.push("<div class='" + cellCss + "'>");
+      var cellValue = "",
+          formattedValue = "",
+          tooltipFormatter,
+          tooltipValue = "",
+          tooltipAttr = "";
+      // if there is a corresponding row (if not, this is the Add New row or this data hasn't been loaded yet)
+      if (d) {
+        cellValue = getDataItemValueForColumn(d, m);
+        formattedValue = getFormatter(row, m)(row, cell, cellValue, m, d);
+        tooltipFormatter = getTooltipFormatter(row, m);
+        tooltipValue = tooltipFormatter ? tooltipFormatter(row, cell, cellValue, formattedValue, m, d) : "";
+        tooltipAttr = tooltipValue ? " title=\"" + tooltipValue + "\"" : "";
+      }
+
+      stringArray.push("<div class='" + cellCss + "'" + tooltipAttr + ">");
 
       // if there is a corresponding row (if not, this is the Add New row or this data hasn't been loaded yet)
       if (d) {
-        var value = getDataItemValueForColumn(d, m);
-        stringArray.push(getFormatter(row, m)(row, cell, value, m, d));
+        stringArray.push(formattedValue);
       }
 
       stringArray.push("</div>");
